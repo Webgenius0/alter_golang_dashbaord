@@ -3,7 +3,9 @@ import { Routes, Route, Navigate, Link, useLocation } from 'react-router-dom'
 import { Login } from './pages/Login'
 import { Settings } from './pages/Settings'
 import { Motivations } from './pages/Motivations'
+import { Library } from './pages/Library'
 import { useLogout } from './hooks/auth/useLogout'
+import { BookOpen } from 'lucide-react'
 
 function DashboardLayout() {
   const logoutMutation = useLogout()
@@ -37,6 +39,10 @@ function DashboardLayout() {
           <Link to="/motivations" className={navLinkClass('/motivations')}>
             <Video size={20} />
             Motivations
+          </Link>
+          <Link to="/library" className={navLinkClass('/library')}>
+            <BookOpen size={20} />
+            Library
           </Link>
           <Link to="/users" className={navLinkClass('/users')}>
             <Users size={20} />
@@ -128,6 +134,7 @@ function DashboardLayout() {
           } />
           
           <Route path="/motivations" element={<Motivations />} />
+          <Route path="/library" element={<Library />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/users" element={<div className="p-8"><h1 className="text-3xl font-semibold">Users</h1></div>} />
         </Routes>

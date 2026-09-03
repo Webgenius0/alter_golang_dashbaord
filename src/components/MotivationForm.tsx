@@ -125,7 +125,7 @@ export function MotivationForm({ initialData, onClose }: MotivationFormProps) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm">
-      <div className="bg-bg-secondary border border-border-subtle rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto p-8 animate-fade-in shadow-2xl">
+      <div className="bg-bg-secondary border border-border-subtle rounded-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto p-8 animate-fade-in shadow-2xl">
         <div className="flex justify-between items-center mb-6 pb-4 border-b border-border-subtle">
           <h2 className="text-xl font-semibold text-text-primary">
             {initialData ? "Edit Motivation" : "Add New Motivation"}

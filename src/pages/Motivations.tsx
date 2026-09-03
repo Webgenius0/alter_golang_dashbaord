@@ -4,7 +4,8 @@ import { MotivationForm } from "../components/MotivationForm";
 import { Plus, Edit2, Trash2, Video, PlayCircle } from "lucide-react";
 
 export function Motivations() {
-  const { data: motivations, isLoading } = useMotivations();
+  const { data: response, isLoading } = useMotivations();
+  const motivations = response?.data || [];
   const deleteMutation = useDeleteMotivation();
   
   const [isFormOpen, setIsFormOpen] = useState(false);
@@ -60,14 +61,14 @@ export function Motivations() {
                 </tr>
               </thead>
               <tbody>
-                {motivations?.length === 0 ? (
+                {motivations.length === 0 ? (
                   <tr>
                     <td colSpan={5} className="p-8 text-center text-text-secondary">
                       No motivations found. Click "Add Motivation" to create one.
                     </td>
                   </tr>
                 ) : (
-                  motivations?.map((m) => (
+                  motivations.map((m) => (
                     <tr key={m.id} className="border-b border-border-subtle hover:bg-white/5 transition-colors group">
                       <td className="p-4 align-middle">
                         <div className="relative w-20 h-12 rounded bg-bg-primary overflow-hidden">

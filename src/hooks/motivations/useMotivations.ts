@@ -24,11 +24,21 @@ export interface MotivationInput {
   duration: string;
 }
 
+export interface PaginatedMotivationResponse {
+  data: Motivation[];
+  meta: {
+    total: number;
+    page: number;
+    limit: number;
+    total_pages: number;
+  };
+}
+
 export function useMotivations() {
   return useQuery({
     queryKey: ["motivations"],
     queryFn: async () => {
-      const res = await apiPublic.get<Motivation[]>("/motivations");
+      const res = await apiPublic.get<PaginatedMotivationResponse>("/motivations");
       return res.data;
     },
   });
