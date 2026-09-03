@@ -26,3 +26,15 @@ export function useUploadMedia() {
     },
   });
 }
+
+export function useDeleteMedia() {
+  return useMutation({
+    mutationFn: async (url: string) => {
+      const res = await apiPrivate.delete("/upload", { data: { url } });
+      return res.data;
+    },
+    onError: (error) => {
+      console.error("Failed to delete orphaned media", error);
+    },
+  });
+}
