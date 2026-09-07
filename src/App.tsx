@@ -5,8 +5,9 @@ import { Settings } from './pages/Settings'
 import { Motivations } from './pages/Motivations'
 import { Worship } from './pages/Worship'
 import { Library } from './pages/Library'
+import { Proverbs } from './pages/Proverbs'
 import { useLogout } from './hooks/auth/useLogout'
-import { BookOpen, Music } from 'lucide-react'
+import { BookOpen, Music, BookText } from 'lucide-react'
 
 function DashboardLayout() {
   const logoutMutation = useLogout()
@@ -44,6 +45,10 @@ function DashboardLayout() {
           <Link to="/worship" className={navLinkClass('/worship')}>
             <Music size={20} />
             Worship
+          </Link>
+          <Link to="/proverbs" className={navLinkClass('/proverbs')}>
+            <BookText size={20} />
+            Proverbs
           </Link>
           <Link to="/library" className={navLinkClass('/library')}>
             <BookOpen size={20} />
@@ -140,6 +145,7 @@ function DashboardLayout() {
           
           <Route path="/motivations" element={<Motivations />} />
           <Route path="/worship" element={<Worship />} />
+          <Route path="/proverbs" element={<Proverbs />} />
           <Route path="/library" element={<Library />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/users" element={<div className="p-8"><h1 className="text-3xl font-semibold">Users</h1></div>} />
