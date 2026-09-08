@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useProverbs, useDeleteProverb, type Proverb } from "../hooks/proverbs/useProverbs";
-import { Edit2, Trash2, Calendar, LayoutGrid, Clock, Link as LinkIcon } from "lucide-react";
+import { Edit2, Trash2, Calendar, LayoutGrid } from "lucide-react";
 
 interface AdminProverbListProps {
   onEdit: (proverb: Proverb) => void;

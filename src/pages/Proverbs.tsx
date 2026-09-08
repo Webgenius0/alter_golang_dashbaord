@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { AdminProverbList } from "../components/AdminProverbList";
 import { AdminProverbForm } from "../components/AdminProverbForm";
 import { type Proverb } from "../hooks/proverbs/useProverbs";
