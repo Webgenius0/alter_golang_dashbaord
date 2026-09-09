@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { usePrayers, useDeletePrayer, type Prayer, type PrayerFilters } from "../../hooks/prayers/usePrayers";
 import { useCategories } from "../../hooks/prayers/useCategories";
-import { Edit2, Trash2, LayoutGrid, Clock, Filter, X } from "lucide-react";
+import { Edit2, Trash2, FolderTree, Clock, Filter, X } from "lucide-react";
 
 interface AdminPrayerListProps {
   onEdit: (prayer: Prayer) => void;
@@ -142,53 +142,50 @@ export function AdminPrayerList({ onEdit }: AdminPrayerListProps) {
         </div>
       )}
 
-      <div className="bg-bg-secondary border border-border-subtle rounded-2xl overflow-hidden shadow-lg">
+      <div className="bg-bg-secondary border border-border-subtle rounded-2xl overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="bg-bg-tertiary border-b border-border-subtle text-text-secondary text-sm">
-                <th className="py-4 px-6 font-medium">Prayer Details</th>
-                <th className="py-4 px-6 font-medium">Category</th>
-                <th className="py-4 px-6 font-medium">Media</th>
-                <th className="py-4 px-6 font-medium text-right">Actions</th>
+              <tr className="bg-black/20 border-b border-border-subtle">
+                <th className="p-4 font-semibold text-text-secondary text-sm uppercase tracking-wider w-16">Cover</th>
+                <th className="p-4 font-semibold text-text-secondary text-sm uppercase tracking-wider">Title & Details</th>
+                <th className="p-4 font-semibold text-text-secondary text-sm uppercase tracking-wider">Category</th>
+                <th className="p-4 font-semibold text-text-secondary text-sm uppercase tracking-wider">Media</th>
+                <th className="p-4 font-semibold text-text-secondary text-sm uppercase tracking-wider text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-border-subtle">
+            <tbody>
               {prayers.length === 0 ? (
                 <tr>
-                  <td colSpan={4} className="py-12 text-center text-text-secondary">
+                  <td colSpan={5} className="p-8 text-center text-text-secondary">
                     No prayers found.
                   </td>
                 </tr>
               ) : (
                 prayers.map((prayer) => (
-                  <tr key={prayer.id} className="hover:bg-bg-tertiary/50 transition-colors group">
-                    <td className="py-4 px-6">
-                      <div className="flex items-center gap-4">
-                        <div className="w-16 h-12 rounded-lg bg-bg-primary border border-border-subtle overflow-hidden shrink-0">
-                          <img 
-                            src={prayer.thumbnailUrl} 
-                            alt={prayer.title}
-                            className="w-full h-full object-cover"
-                            onError={(e) => {
-                              (e.target as HTMLImageElement).src = "https://placehold.co/400x225/1A1D24/FFFFFF?text=No+Image";
-                            }}
-                          />
-                        </div>
-                        <div className="flex flex-col">
-                          <span className="font-medium text-text-primary group-hover:text-accent transition-colors line-clamp-1">
-                            {prayer.title}
-                          </span>
-                          <span className="text-xs text-text-secondary mt-1 px-2 py-0.5 bg-white/5 rounded-md inline-block w-max">
-                            {prayer.category?.targetAudience} {prayer.ageGroup ? `• ${prayer.ageGroup}` : ""}
-                          </span>
-                        </div>
+                  <tr key={prayer.id} className="border-b border-border-subtle hover:bg-white/5 transition-colors group">
+                    <td className="p-4 align-middle">
+                      <div className="w-12 h-12 rounded-lg bg-bg-primary overflow-hidden shrink-0 shadow-sm border border-border-subtle relative">
+                        <img 
+                          src={prayer.thumbnailUrl} 
+                          alt={prayer.title}
+                          className="w-full h-full object-cover"
+                          onError={(e) => {
+                            (e.target as HTMLImageElement).src = "https://placehold.co/400x225/1A1D24/FFFFFF?text=No+Image";
+                          }}
+                        />
                       </div>
                     </td>
-                    <td className="py-4 px-6">
+                    <td className="p-4 align-middle">
+                      <div className="font-medium text-text-primary">{prayer.title}</div>
+                      <div className="text-sm text-text-secondary mt-0.5">
+                        {prayer.category?.targetAudience} {prayer.ageGroup ? `• ${prayer.ageGroup}` : ""}
+                      </div>
+                    </td>
+                    <td className="p-4 align-middle">
                       <div className="flex flex-col gap-1">
-                        <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-white/5 text-text-secondary text-xs font-medium rounded-full border border-border-subtle w-max">
-                          <LayoutGrid size={12} />
+                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-white/5 text-text-secondary text-xs font-medium rounded-full border border-border-subtle w-max">
+                          <FolderTree size={12} />
                           {prayer.category?.name}
                         </span>
                         {prayer.subCategory && (
@@ -198,7 +195,7 @@ export function AdminPrayerList({ onEdit }: AdminPrayerListProps) {
                         )}
                       </div>
                     </td>
-                    <td className="py-4 px-6 text-text-secondary text-sm">
+                    <td className="p-4 align-middle text-text-secondary text-sm">
                       <div className="flex flex-col gap-1">
                         <span className="font-medium text-white">{prayer.mediaType}</span>
                         <div className="flex items-center gap-1.5 text-xs">
@@ -207,24 +204,22 @@ export function AdminPrayerList({ onEdit }: AdminPrayerListProps) {
                         </div>
                       </div>
                     </td>
-                    <td className="py-4 px-6">
-                      <div className="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <button
-                          onClick={() => onEdit(prayer)}
-                          className="p-2 text-text-secondary hover:text-accent bg-bg-primary hover:bg-white/10 rounded-lg transition-colors border border-border-subtle"
-                          title="Edit Prayer"
-                        >
-                          <Edit2 size={16} />
-                        </button>
-                        <button
-                          onClick={() => handleDelete(prayer.id, prayer.title)}
-                          disabled={deleteMutation.isPending}
-                          className="p-2 text-text-secondary hover:text-red-500 bg-bg-primary hover:bg-red-500/10 rounded-lg transition-colors border border-border-subtle"
-                          title="Delete Prayer"
-                        >
-                          <Trash2 size={16} />
-                        </button>
-                      </div>
+                    <td className="p-4 align-middle text-right space-x-2">
+                      <button
+                        onClick={() => onEdit(prayer)}
+                        className="inline-flex items-center justify-center p-2 bg-bg-tertiary text-text-primary rounded hover:bg-white/10 transition-colors"
+                        title="Edit"
+                      >
+                        <Edit2 size={16} />
+                      </button>
+                      <button
+                        onClick={() => handleDelete(prayer.id, prayer.title)}
+                        disabled={deleteMutation.isPending}
+                        className="inline-flex items-center justify-center p-2 bg-bg-tertiary text-red-500 rounded hover:bg-red-500/20 transition-colors disabled:opacity-50"
+                        title="Delete"
+                      >
+                        <Trash2 size={16} />
+                      </button>
                     </td>
                   </tr>
                 ))
