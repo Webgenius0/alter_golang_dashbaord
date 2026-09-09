@@ -48,16 +48,11 @@ export function CategoryManagement() {
 
 
   return (
-    <div className="p-8 pb-24 max-w-5xl mx-auto animate-slide-up">
+    <div className="p-8 animate-slide-up">
       <div className="flex items-center justify-between mb-8">
         <div>
-          <div className="flex items-center gap-3 mb-2">
-            <div className="w-10 h-10 rounded-xl bg-accent/20 flex items-center justify-center text-accent">
-              <FolderTree size={20} />
-            </div>
-            <h1 className="text-3xl font-semibold text-text-primary">Categories</h1>
-          </div>
-          <p className="text-text-secondary ml-14">
+          <h1 className="text-3xl font-semibold text-text-primary">Categories</h1>
+          <p className="text-text-secondary mt-2">
             Manage prayer categories and subcategories.
           </p>
         </div>
@@ -71,7 +66,7 @@ export function CategoryManagement() {
         </button>
       </div>
 
-      <div className="bg-bg-secondary/50 backdrop-blur-md rounded-2xl border border-border-subtle overflow-hidden">
+      <div className="bg-bg-secondary border border-border-subtle rounded-2xl overflow-hidden">
         {isLoading ? (
           <div className="p-8 text-center text-text-secondary">Loading categories...</div>
         ) : categories?.length === 0 ? (
@@ -173,24 +168,24 @@ function CategoryRow({ category, isExpanded, onToggle, onEdit, onDelete }: any) 
 
   return (
     <div>
-      <div className="flex items-center justify-between p-4 hover:bg-bg-tertiary/50 transition-colors cursor-pointer group" onClick={onToggle}>
+      <div className="flex items-center justify-between p-4 border-b border-border-subtle hover:bg-white/5 transition-colors cursor-pointer group" onClick={onToggle}>
         <div className="flex items-center gap-4">
-          <div className="text-text-secondary">
+          <div className="text-text-secondary w-6 flex justify-center">
             {isExpanded ? <ChevronDown size={20} /> : <ChevronRight size={20} />}
           </div>
-          <div>
-            <div className="font-semibold text-white">{category.name}</div>
-            <div className="text-xs text-text-secondary mt-0.5 px-2 py-0.5 bg-white/5 rounded-md inline-block">{category.targetAudience}</div>
+          <div className="flex flex-col">
+            <span className="font-medium text-text-primary group-hover:text-accent transition-colors">{category.name}</span>
+            <span className="text-xs text-text-secondary mt-1 px-2 py-0.5 bg-white/5 rounded-md inline-block w-max">{category.targetAudience}</span>
           </div>
         </div>
         <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity" onClick={e => e.stopPropagation()}>
-          <button onClick={() => handleOpenSubModal()} className="p-2 text-accent hover:bg-accent/10 rounded-lg transition-colors" title="Add Subcategory">
+          <button onClick={() => handleOpenSubModal()} className="p-2 text-text-secondary hover:text-accent bg-bg-primary hover:bg-white/10 rounded-lg transition-colors border border-border-subtle" title="Add Subcategory">
             <Plus size={16} />
           </button>
-          <button onClick={onEdit} className="p-2 text-text-secondary hover:text-white hover:bg-white/10 rounded-lg transition-colors">
+          <button onClick={onEdit} className="p-2 text-text-secondary hover:text-accent bg-bg-primary hover:bg-white/10 rounded-lg transition-colors border border-border-subtle" title="Edit Category">
             <Edit2 size={16} />
           </button>
-          <button onClick={onDelete} className="p-2 text-red-400 hover:text-red-500 hover:bg-red-500/10 rounded-lg transition-colors">
+          <button onClick={onDelete} className="p-2 text-text-secondary hover:text-red-500 bg-bg-primary hover:bg-red-500/10 rounded-lg transition-colors border border-border-subtle" title="Delete Category">
             <Trash2 size={16} />
           </button>
         </div>
@@ -206,17 +201,17 @@ function CategoryRow({ category, isExpanded, onToggle, onEdit, onDelete }: any) 
           ) : subCategories?.length === 0 ? (
             <div className="text-sm text-text-secondary py-2">No subcategories yet.</div>
           ) : (
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col">
               {subCategories?.map(sub => (
-                <div key={sub.id} className="flex items-center justify-between p-3 bg-bg-secondary rounded-xl border border-border-subtle/50 group/sub">
-                  <span className="text-sm font-medium text-white">{sub.name}</span>
-                  <div className="flex items-center gap-1 opacity-0 group-hover/sub:opacity-100 transition-opacity">
-                    <button onClick={() => handleOpenSubModal(sub)} className="p-1.5 text-text-secondary hover:text-white hover:bg-white/10 rounded-md transition-colors">
+                <div key={sub.id} className="flex items-center justify-between p-3 border-b border-border-subtle/50 last:border-b-0 hover:bg-white/5 transition-colors group/sub">
+                  <span className="text-sm font-medium text-text-primary pl-2">{sub.name}</span>
+                  <div className="flex items-center gap-2 opacity-0 group-hover/sub:opacity-100 transition-opacity">
+                    <button onClick={() => handleOpenSubModal(sub)} className="p-1.5 text-text-secondary hover:text-accent bg-bg-primary hover:bg-white/10 rounded-md transition-colors border border-border-subtle">
                       <Edit2 size={14} />
                     </button>
                     <button onClick={() => {
                       if (confirm("Delete subcategory?")) deleteSub.mutate(sub.id);
-                    }} className="p-1.5 text-red-400 hover:text-red-500 hover:bg-red-500/10 rounded-md transition-colors">
+                    }} className="p-1.5 text-text-secondary hover:text-red-500 bg-bg-primary hover:bg-red-500/10 rounded-md transition-colors border border-border-subtle">
                       <Trash2 size={14} />
                     </button>
                   </div>
