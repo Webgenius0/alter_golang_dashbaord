@@ -2,6 +2,7 @@ import { useState } from "react";
 import { usePrayers, useDeletePrayer, type Prayer, type PrayerFilters } from "../../hooks/prayers/usePrayers";
 import { useCategories } from "../../hooks/prayers/useCategories";
 import { Edit2, Trash2, FolderTree, Clock, Filter, X } from "lucide-react";
+import { ConfirmModal } from "../ConfirmModal";
 
 interface AdminPrayerListProps {
   onEdit: (prayer: Prayer) => void;
@@ -13,14 +14,21 @@ export function AdminPrayerList({ onEdit }: AdminPrayerListProps) {
   
   const [filters, setFilters] = useState<PrayerFilters>({});
   const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [deleteTarget, setDeleteTarget] = useState<{ id: string; title: string } | null>(null);
   
   const { data, isLoading, isError } = usePrayers(page, limit, filters);
   const { data: categories } = useCategories();
   const deleteMutation = useDeletePrayer();
 
   const handleDelete = (id: string, title: string) => {
-    if (window.confirm(`Are you sure you want to delete "${title}"?`)) {
-      deleteMutation.mutate(id);
+    setDeleteTarget({ id, title });
+  };
+
+  const confirmDelete = () => {
+    if (deleteTarget) {
+      deleteMutation.mutate(deleteTarget.id, {
+        onSuccess: () => setDeleteTarget(null)
+      });
     }
   };
 
@@ -290,6 +298,18 @@ export function AdminPrayerList({ onEdit }: AdminPrayerListProps) {
           </div>
         )}
       </div>
+
+      <ConfirmModal
+        isOpen={!!deleteTarget}
+        onClose={() => setDeleteTarget(null)}
+        onConfirm={confirmDelete}
+        title="Delete Prayer"
+        message={`Are you sure you want to delete "${deleteTarget?.title}"? This action cannot be undone.`}
+        confirmText="Delete"
+        cancelText="Cancel"
+        isDestructive={true}
+        isLoading={deleteMutation.isPending}
+      />
     </div>
   );
 }
