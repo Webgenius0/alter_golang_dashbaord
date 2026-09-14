@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { FolderTree, Plus, Edit2, Trash2, ChevronRight, ChevronDown } from "lucide-react";
+import { Plus, Edit2, Trash2, ChevronRight, ChevronDown } from "lucide-react";
 import { useCategories, useCreateCategory, useUpdateCategory, useDeleteCategory } from "../hooks/prayers/useCategories";
 import type { Category } from "../hooks/prayers/useCategories";
 import { useSubCategories, useCreateSubCategory, useUpdateSubCategory, useDeleteSubCategory } from "../hooks/prayers/useSubCategories";
