@@ -11,6 +11,7 @@ export interface Prayer {
   subCategoryId?: string;
   ageGroup?: string;
   mediaType: "Audio" | "Video";
+  prayerType: "Morning Prayer" | "Night Prayer";
   duration: string;
   thumbnailUrl: string;
   mediaUrl: string;
@@ -36,6 +37,7 @@ export interface PrayerInput {
   subCategoryId?: string;
   ageGroup?: string;
   mediaType: "Audio" | "Video";
+  prayerType: "Morning Prayer" | "Night Prayer";
   duration: string;
   thumbnailUrl: string;
   mediaUrl: string;
@@ -47,6 +49,7 @@ export interface PrayerFilters {
   categoryId?: string;
   ageGroup?: string;
   mediaType?: string;
+  prayerType?: string;
 }
 
 export const usePrayers = (page = 1, limit = 10, filters: PrayerFilters = {}) => {
@@ -61,6 +64,7 @@ export const usePrayers = (page = 1, limit = 10, filters: PrayerFilters = {}) =>
       if (filters.categoryId) params.append("categoryId", filters.categoryId);
       if (filters.ageGroup) params.append("ageGroup", filters.ageGroup);
       if (filters.mediaType) params.append("mediaType", filters.mediaType);
+      if (filters.prayerType) params.append("prayerType", filters.prayerType);
 
       const response = await apiPrivate.get<PaginatedPrayers>(`/admin/prayers?${params.toString()}`);
       return response.data;

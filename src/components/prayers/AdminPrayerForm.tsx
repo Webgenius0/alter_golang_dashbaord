@@ -32,6 +32,7 @@ export function AdminPrayerForm({ initialData, onClose }: AdminPrayerFormProps) 
     subCategoryId: "",
     ageGroup: "",
     mediaType: "Audio",
+    prayerType: "Morning Prayer",
     duration: "",
     thumbnailUrl: "",
     mediaUrl: "",
@@ -52,6 +53,7 @@ export function AdminPrayerForm({ initialData, onClose }: AdminPrayerFormProps) 
         subCategoryId: initialData.subCategoryId || "",
         ageGroup: initialData.ageGroup || "",
         mediaType: initialData.mediaType,
+        prayerType: initialData.prayerType || "Morning Prayer",
         duration: initialData.duration,
         thumbnailUrl: initialData.thumbnailUrl,
         mediaUrl: initialData.mediaUrl,
@@ -296,6 +298,25 @@ export function AdminPrayerForm({ initialData, onClose }: AdminPrayerFormProps) 
                 >
                   <option value="Audio">Audio</option>
                   <option value="Video">Video</option>
+                </select>
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-text-primary">Prayer Type *</label>
+                <select
+                  required
+                  name="prayerType"
+                  value={formData.prayerType}
+                  onChange={(e) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      prayerType: e.target.value as "Morning Prayer" | "Night Prayer",
+                    }))
+                  }
+                  className="w-full bg-bg-tertiary border border-border-subtle rounded-lg px-4 py-2.5 text-text-primary focus:outline-none focus:border-accent transition-colors appearance-none"
+                >
+                  <option value="Morning Prayer">🌅 Morning Prayer</option>
+                  <option value="Night Prayer">🌙 Night Prayer</option>
                 </select>
               </div>
               

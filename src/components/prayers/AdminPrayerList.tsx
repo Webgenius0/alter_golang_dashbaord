@@ -131,6 +131,19 @@ export function AdminPrayerList({ onEdit }: AdminPrayerListProps) {
             </select>
           </div>
 
+          <div className="flex-1 min-w-[150px]">
+            <label className="block text-xs font-medium text-text-secondary mb-1">Prayer Type</label>
+            <select
+              value={filters.prayerType || ""}
+              onChange={(e) => handleFilterChange("prayerType", e.target.value)}
+              className="w-full bg-bg-primary border border-border-subtle rounded-lg px-3 py-2 text-sm text-white focus:border-accent focus:outline-none"
+            >
+              <option value="">All</option>
+              <option value="Morning Prayer">🌅 Morning Prayer</option>
+              <option value="Night Prayer">🌙 Night Prayer</option>
+            </select>
+          </div>
+
           {Object.keys(filters).length > 0 && (
             <button
               onClick={clearFilters}
@@ -181,6 +194,15 @@ export function AdminPrayerList({ onEdit }: AdminPrayerListProps) {
                       <div className="text-sm text-text-secondary mt-0.5">
                         {prayer.category?.targetAudience} {prayer.ageGroup ? `• ${prayer.ageGroup}` : ""}
                       </div>
+                      {prayer.prayerType && (
+                        <span className={`inline-flex items-center gap-1 mt-1 px-2 py-0.5 rounded-full text-xs font-medium border ${
+                          prayer.prayerType === "Morning Prayer"
+                            ? "bg-amber-500/10 text-amber-400 border-amber-500/20"
+                            : "bg-indigo-500/10 text-indigo-400 border-indigo-500/20"
+                        }`}>
+                          {prayer.prayerType === "Morning Prayer" ? "🌅" : "🌙"} {prayer.prayerType}
+                        </span>
+                      )}
                     </td>
                     <td className="p-4 align-middle">
                       <div className="flex flex-col gap-1">
