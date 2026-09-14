@@ -13,7 +13,7 @@ export function AdminPrayerList({ onEdit }: AdminPrayerListProps) {
   const limit = 10;
   
   const [filters, setFilters] = useState<PrayerFilters>({});
-  const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [isFilterOpen, setIsFilterOpen] = useState(true);
   const [deleteTarget, setDeleteTarget] = useState<{ id: string; title: string } | null>(null);
   
   const { data, isLoading, isError } = usePrayers(page, limit, filters);
