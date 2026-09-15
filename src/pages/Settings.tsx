@@ -25,13 +25,13 @@ export function Settings() {
   };
 
   return (
-    <div className="p-8 max-w-4xl">
-      <div className="mb-8">
+    <div className="p-4 lg:p-8 max-w-4xl">
+      <div className="mb-6 lg:mb-8">
         <h1 className="text-3xl font-semibold text-text-primary">Settings</h1>
         <p className="text-text-secondary mt-2">Manage your admin preferences and security.</p>
       </div>
 
-      <div className="bg-bg-secondary border border-border-subtle rounded-2xl p-8 max-w-2xl">
+      <div className="bg-bg-secondary border border-border-subtle rounded-2xl p-4 sm:p-8 max-w-2xl">
         <div className="flex items-center gap-3 mb-6 pb-6 border-b border-border-subtle">
           <div className="p-3 bg-bg-tertiary rounded-xl">
             <Lock className="text-accent" size={24} />
@@ -76,11 +76,11 @@ export function Settings() {
             />
           </div>
 
-          <div className="mt-4 flex justify-end">
+          <div className="mt-4 flex flex-col sm:flex-row justify-end">
             <button 
               type="submit" 
               disabled={changePasswordMutation.isPending}
-              className="flex items-center gap-2 px-6 py-3 bg-accent hover:bg-accent-hover text-white font-semibold rounded-lg transition-all duration-200 disabled:opacity-70 disabled:cursor-not-allowed"
+              className="flex items-center justify-center gap-2 px-6 py-3 bg-accent hover:bg-accent-hover text-white font-semibold rounded-lg transition-all duration-200 disabled:opacity-70 disabled:cursor-not-allowed w-full sm:w-auto"
             >
               <Save size={18} />
               {changePasswordMutation.isPending ? "Updating..." : "Update Password"}

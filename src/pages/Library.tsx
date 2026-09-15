@@ -36,23 +36,23 @@ export function Library() {
   const categories = ["All", ...categoriesData.map(c => c.name)];
 
   return (
-    <div className="p-8">
-      <div className="flex justify-between items-center mb-8">
+    <div className="p-4 lg:p-8">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6 lg:mb-8">
         <div>
           <h1 className="text-3xl font-semibold text-text-primary">Library</h1>
           <p className="text-text-secondary mt-2">Manage library content (Prayers, Illustrations, etc.) for mobile users.</p>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex flex-col sm:flex-row w-full sm:w-auto items-stretch sm:items-center gap-3">
           <button 
             onClick={() => setIsCategoryManagerOpen(true)}
-            className="flex items-center gap-2 px-4 py-2.5 bg-bg-tertiary hover:bg-bg-tertiary/80 text-text-primary font-semibold rounded-lg transition-colors border border-border-subtle"
+            className="flex items-center justify-center gap-2 px-4 py-2.5 bg-bg-tertiary hover:bg-bg-tertiary/80 text-text-primary font-semibold rounded-lg transition-colors border border-border-subtle"
           >
             <Settings2 size={20} />
             Categories
           </button>
           <button 
             onClick={handleAddNew}
-            className="flex items-center gap-2 px-4 py-2.5 bg-accent hover:bg-accent-hover text-white font-semibold rounded-lg transition-colors shadow-lg shadow-accent/20"
+            className="flex items-center justify-center gap-2 px-4 py-2.5 bg-accent hover:bg-accent-hover text-white font-semibold rounded-lg transition-colors shadow-lg shadow-accent/20"
           >
             <Plus size={20} />
             Add Library Item

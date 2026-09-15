@@ -1,5 +1,6 @@
-import { LayoutDashboard, Users, Settings as SettingsIcon, Search, Bell, TrendingUp, TrendingDown, Layers, LogOut, Video } from 'lucide-react'
+import { LayoutDashboard, Users, Settings as SettingsIcon, Search, Bell, TrendingUp, TrendingDown, Layers, LogOut, Video, Menu, X, BookOpen, Music, BookText, BookHeart, FolderTree } from 'lucide-react'
 import { Routes, Route, Navigate, Link, useLocation } from 'react-router-dom'
+import { useState, useEffect } from 'react'
 import { Login } from './pages/Login'
 import { Settings } from './pages/Settings'
 import { Motivations } from './pages/Motivations'
@@ -9,12 +10,16 @@ import { Proverbs } from './pages/Proverbs'
 import { PrayerManagement } from './pages/PrayerManagement'
 import { CategoryManagement } from './pages/CategoryManagement'
 import { useLogout } from './hooks/auth/useLogout'
-import { BookOpen, Music, BookText, BookHeart, FolderTree } from 'lucide-react'
-
 function DashboardLayout() {
   const logoutMutation = useLogout()
   const location = useLocation()
   const token = localStorage.getItem("accessToken")
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+
+  // Close mobile menu on route change
+  useEffect(() => {
+    setIsMobileMenuOpen(false)
+  }, [location.pathname])
 
   if (!token) {
     return <Navigate to="/login" replace />
@@ -34,14 +39,30 @@ function DashboardLayout() {
   );
 
   return (
-    <div className="flex h-screen overflow-hidden bg-bg-primary text-text-primary font-sans animate-fade-in">
+    <div className="flex h-screen overflow-hidden bg-bg-primary text-text-primary font-sans animate-fade-in relative">
+      {/* Mobile Overlay */}
+      {isMobileMenuOpen && (
+        <div 
+          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 lg:hidden transition-opacity"
+          onClick={() => setIsMobileMenuOpen(false)}
+        />
+      )}
+
       {/* Sidebar */}
-      <aside className="w-[280px] bg-glass-strong backdrop-blur-xl border-r border-border-subtle flex flex-col p-6 transition-all duration-300 z-20 shadow-2xl shadow-black/50">
-        <div className="text-2xl font-bold text-white mb-8 flex items-center gap-3 tracking-tight">
-          <div className="p-2 bg-gradient-to-br from-accent to-purple-600 rounded-xl shadow-lg shadow-accent/20">
-            <Layers className="text-white" size={24} />
+      <aside className={`fixed inset-y-0 left-0 z-50 w-[280px] bg-glass-strong backdrop-blur-xl border-r border-border-subtle flex flex-col p-6 transition-transform duration-300 shadow-2xl shadow-black/50 lg:relative lg:translate-x-0 ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+        <div className="text-2xl font-bold text-white mb-8 flex items-center justify-between tracking-tight">
+          <div className="flex items-center gap-3">
+            <div className="p-2 bg-gradient-to-br from-accent to-purple-600 rounded-xl shadow-lg shadow-accent/20">
+              <Layers className="text-white" size={24} />
+            </div>
+            <span>Altar Admin</span>
           </div>
-          <span>Altar Admin</span>
+          <button 
+            className="lg:hidden p-2 text-text-secondary hover:text-white rounded-lg bg-white/5"
+            onClick={() => setIsMobileMenuOpen(false)}
+          >
+            <X size={20} />
+          </button>
         </div>
         <nav className="flex flex-col gap-2">
           <Link to="/" className={navLinkClass('/')}>
@@ -104,28 +125,40 @@ function DashboardLayout() {
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1 flex flex-col overflow-y-auto">
+      <main className="flex-1 flex flex-col overflow-y-auto w-full lg:w-auto">
         {/* Topbar */}
-        <header className="h-[76px] flex items-center justify-between px-8 bg-glass backdrop-blur-xl border-b border-border-subtle sticky top-0 z-10">
-          <div className="flex items-center gap-3 bg-black/40 border border-border-subtle rounded-full px-5 py-2.5 w-[350px] text-text-secondary focus-within:border-accent focus-within:shadow-[0_0_15px_rgba(99,102,241,0.3)] transition-all duration-300">
-            <Search size={18} className="text-text-secondary focus-within:text-accent" />
-            <input 
-              type="text" 
-              placeholder="Search dashboard..." 
-              className="bg-transparent border-none outline-none w-full text-white placeholder:text-text-secondary font-medium"
-            />
+        <header className="h-[76px] flex items-center justify-between px-4 lg:px-8 bg-glass backdrop-blur-xl border-b border-border-subtle sticky top-0 z-10 w-full shrink-0">
+          <div className="flex items-center gap-3 lg:gap-4">
+            <button 
+              className="lg:hidden p-2 text-text-secondary hover:text-white bg-bg-secondary hover:bg-bg-tertiary rounded-xl transition-colors border border-border-subtle"
+              onClick={() => setIsMobileMenuOpen(true)}
+            >
+              <Menu size={20} />
+            </button>
+            <div className="hidden sm:flex items-center gap-3 bg-black/40 border border-border-subtle rounded-full px-5 py-2.5 w-[250px] lg:w-[350px] text-text-secondary focus-within:border-accent focus-within:shadow-[0_0_15px_rgba(99,102,241,0.3)] transition-all duration-300">
+              <Search size={18} className="text-text-secondary focus-within:text-accent shrink-0" />
+              <input 
+                type="text" 
+                placeholder="Search dashboard..." 
+                className="bg-transparent border-none outline-none w-full text-white placeholder:text-text-secondary font-medium min-w-0"
+              />
+            </div>
+            {/* Mobile search button (optional, can just hide search on mobile as done above) */}
+            <button className="sm:hidden p-2 text-text-secondary hover:text-white bg-bg-secondary hover:bg-bg-tertiary rounded-xl transition-colors border border-border-subtle">
+              <Search size={20} />
+            </button>
           </div>
           
-          <div className="flex items-center gap-6">
-            <button className="relative p-2 text-text-secondary hover:text-white bg-bg-secondary hover:bg-bg-tertiary rounded-full transition-colors border border-border-subtle group">
+          <div className="flex items-center gap-3 lg:gap-6">
+            <button className="relative p-2 text-text-secondary hover:text-white bg-bg-secondary hover:bg-bg-tertiary rounded-full transition-colors border border-border-subtle group shrink-0">
               <Bell size={20} className="group-hover:animate-bounce" />
               <span className="absolute top-0 right-0 w-2.5 h-2.5 bg-red-500 border-2 border-bg-secondary rounded-full animate-pulse-slow"></span>
             </button>
-            <div className="flex items-center gap-4 cursor-pointer p-1.5 pr-4 rounded-full bg-bg-secondary border border-border-subtle hover:border-border-focus transition-colors">
-              <div className="w-9 h-9 rounded-full bg-gradient-to-br from-accent via-indigo-500 to-purple-600 flex items-center justify-center font-bold text-white shadow-lg shadow-accent/20">
+            <div className="flex items-center gap-3 lg:gap-4 cursor-pointer p-1.5 lg:pr-4 rounded-full bg-bg-secondary border border-border-subtle hover:border-border-focus transition-colors">
+              <div className="w-9 h-9 rounded-full bg-gradient-to-br from-accent via-indigo-500 to-purple-600 flex items-center justify-center font-bold text-white shadow-lg shadow-accent/20 shrink-0">
                 AD
               </div>
-              <div className="flex flex-col items-start leading-tight">
+              <div className="hidden lg:flex flex-col items-start leading-tight">
                 <span className="text-sm font-bold text-white">Admin User</span>
                 <span className="text-xs text-text-secondary font-medium">admin@altar.com</span>
               </div>
@@ -136,11 +169,11 @@ function DashboardLayout() {
         {/* Content Area */}
         <Routes>
           <Route path="/" element={
-            <div className="p-8 max-w-7xl mx-auto w-full animate-slide-up">
-              <div className="mb-10 flex justify-between items-end">
+            <div className="p-4 lg:p-8 max-w-7xl mx-auto w-full animate-slide-up">
+              <div className="mb-8 lg:mb-10 flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4">
                 <div>
-                  <h1 className="text-4xl font-extrabold text-white tracking-tight">Dashboard Overview</h1>
-                  <p className="text-text-secondary mt-2 text-lg">Welcome back. Here's what's happening today.</p>
+                  <h1 className="text-3xl lg:text-4xl font-extrabold text-white tracking-tight">Dashboard Overview</h1>
+                  <p className="text-text-secondary mt-2 text-base lg:text-lg">Welcome back. Here's what's happening today.</p>
                 </div>
               </div>
               

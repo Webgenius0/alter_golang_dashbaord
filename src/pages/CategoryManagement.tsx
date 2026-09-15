@@ -48,8 +48,8 @@ export function CategoryManagement() {
 
 
   return (
-    <div className="p-8 animate-slide-up">
-      <div className="flex items-center justify-between mb-8">
+    <div className="p-4 lg:p-8 animate-slide-up">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6 lg:mb-8">
         <div>
           <h1 className="text-3xl font-semibold text-text-primary">Categories</h1>
           <p className="text-text-secondary mt-2">
@@ -59,7 +59,7 @@ export function CategoryManagement() {
         
         <button
           onClick={() => handleOpenCategoryModal()}
-          className="flex items-center gap-2 px-6 py-2.5 bg-accent text-white font-medium rounded-xl hover:bg-accent-hover transition-colors shadow-lg shadow-accent/20 hover:shadow-accent/40"
+          className="flex items-center justify-center gap-2 px-6 py-2.5 bg-accent text-white font-medium rounded-xl hover:bg-accent-hover transition-colors shadow-lg shadow-accent/20 hover:shadow-accent/40 w-full sm:w-auto"
         >
           <Plus size={20} />
           Add Category
