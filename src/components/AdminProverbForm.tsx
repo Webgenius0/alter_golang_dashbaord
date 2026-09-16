@@ -41,6 +41,7 @@ export function AdminProverbForm({ initialData, onClose }: AdminProverbFormProps
     scripture_reference: "",
     main_text: "",
     explanation: "",
+    target_audience: "General",
     publish_date: formatDateForInput(new Date().toISOString()),
   });
 
@@ -58,6 +59,7 @@ export function AdminProverbForm({ initialData, onClose }: AdminProverbFormProps
         scripture_reference: initialData.scripture_reference,
         main_text: initialData.main_text,
         explanation: initialData.explanation,
+        target_audience: initialData.target_audience || "General",
         publish_date: formatDateForInput(initialData.publish_date),
       });
     }
@@ -269,10 +271,36 @@ export function AdminProverbForm({ initialData, onClose }: AdminProverbFormProps
                     name="publish_date"
                     value={formData.publish_date}
                     onChange={handleChange}
-                    className="w-full bg-bg-tertiary border border-border-subtle rounded-lg px-10 py-2.5 text-text-primary focus:outline-none focus:border-accent transition-colors"
+                    onClick={(e) => {
+                      if ('showPicker' in HTMLInputElement.prototype) {
+                        try {
+                          (e.target as HTMLInputElement).showPicker();
+                        } catch (err) {
+                          // ignore errors if picker cannot be shown
+                        }
+                      }
+                    }}
+                    className="w-full bg-bg-tertiary border border-border-subtle rounded-lg px-10 py-2.5 text-text-primary focus:outline-none focus:border-accent transition-colors [&::-webkit-calendar-picker-indicator]:opacity-0 [&::-webkit-calendar-picker-indicator]:absolute [&::-webkit-calendar-picker-indicator]:w-full"
                   />
                   <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 text-text-secondary pointer-events-none" size={18} />
                 </div>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-text-primary">Target Audience *</label>
+                <select
+                  required
+                  name="target_audience"
+                  value={formData.target_audience}
+                  onChange={handleChange}
+                  className="w-full bg-bg-tertiary border border-border-subtle rounded-lg px-4 py-2.5 text-text-primary focus:outline-none focus:border-accent transition-colors appearance-none"
+                >
+                  <option value="General">General</option>
+                  <option value="Kids">Kids</option>
+                  <option value="Teens">Teens</option>
+                </select>
               </div>
             </div>
 

@@ -12,6 +12,7 @@ export interface Proverb {
   scripture_reference: string;
   main_text: string;
   explanation: string;
+  target_audience: string;
   publish_date: string;
   created_at: string;
   updated_at: string;
@@ -34,6 +35,7 @@ export interface ProverbInput {
   scripture_reference: string;
   main_text: string;
   explanation: string;
+  target_audience: string;
   publish_date: string; // ISO format string
 }
 
@@ -63,7 +65,8 @@ export const useCreateProverb = () => {
     },
     onError: (error: any) => {
       const message = error.response?.data?.message || "Failed to create proverb";
-      toast.error(message);
+      const details = error.response?.data?.error || "";
+      toast.error(details ? `${message}: ${details}` : message);
     },
   });
 };
@@ -82,7 +85,8 @@ export const useUpdateProverb = () => {
     },
     onError: (error: any) => {
       const message = error.response?.data?.message || "Failed to update proverb";
-      toast.error(message);
+      const details = error.response?.data?.error || "";
+      toast.error(details ? `${message}: ${details}` : message);
     },
   });
 };

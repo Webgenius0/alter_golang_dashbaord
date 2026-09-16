@@ -46,6 +46,8 @@ export function AdminProverbList({ onEdit }: AdminProverbListProps) {
               <tr className="bg-bg-tertiary border-b border-border-subtle text-text-secondary text-sm">
                 <th className="py-4 px-6 font-medium">Proverb Details</th>
                 <th className="py-4 px-6 font-medium">Category</th>
+                <th className="py-4 px-6 font-medium">Audience</th>
+                <th className="py-4 px-6 font-medium">Duration</th>
                 <th className="py-4 px-6 font-medium">Publish Date</th>
                 <th className="py-4 px-6 font-medium text-right">Actions</th>
               </tr>
@@ -53,7 +55,7 @@ export function AdminProverbList({ onEdit }: AdminProverbListProps) {
             <tbody className="divide-y divide-border-subtle">
               {proverbs.length === 0 ? (
                 <tr>
-                  <td colSpan={4} className="py-12 text-center text-text-secondary">
+                  <td colSpan={6} className="py-12 text-center text-text-secondary">
                     No proverbs found. Click "Add New Proverb" to create one.
                   </td>
                 </tr>
@@ -87,6 +89,24 @@ export function AdminProverbList({ onEdit }: AdminProverbListProps) {
                         <LayoutGrid size={12} />
                         {proverb.category}
                       </span>
+                    </td>
+                    <td className="py-4 px-6">
+                      {(() => {
+                        const audienceColors: Record<string, string> = {
+                          General: "bg-blue-500/10 text-blue-400 border-blue-500/20",
+                          Kids: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
+                          Teens: "bg-purple-500/10 text-purple-400 border-purple-500/20",
+                        };
+                        const color = audienceColors[proverb.target_audience] ?? "bg-white/5 text-text-secondary border-border-subtle";
+                        return (
+                          <span className={`inline-flex items-center px-3 py-1 text-xs font-medium rounded-full border ${color}`}>
+                            {proverb.target_audience || "General"}
+                          </span>
+                        );
+                      })()}
+                    </td>
+                    <td className="py-4 px-6 text-text-secondary text-sm whitespace-nowrap">
+                      {proverb.duration}
                     </td>
                     <td className="py-4 px-6 text-text-secondary text-sm">
                       <div className="flex items-center gap-2">
