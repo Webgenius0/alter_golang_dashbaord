@@ -5,21 +5,24 @@ import { toast } from "sonner";
 export interface Category {
   id: string;
   name: string;
-  targetAudience: "General" | "Kids" | "Teens";
+  targetAudience: "General" | "Kids" | "Teens" | "Adults";
+  module: "Prayer" | "Faith";
   createdAt: string;
   updatedAt: string;
 }
 
 export interface CategoryInput {
   name: string;
-  targetAudience: "General" | "Kids" | "Teens";
+  targetAudience: "General" | "Kids" | "Teens" | "Adults";
+  module: "Prayer" | "Faith";
 }
 
-export const useCategories = () => {
+export const useCategories = (module?: "Prayer" | "Faith") => {
   return useQuery({
-    queryKey: ["prayer-categories"],
+    queryKey: ["prayer-categories", module],
     queryFn: async () => {
-      const response = await apiPrivate.get<Category[]>("/admin/categories");
+      const url = module ? `/admin/categories?module=${module}` : "/admin/categories";
+      const response = await apiPrivate.get<Category[]>(url);
       return response.data;
     },
   });

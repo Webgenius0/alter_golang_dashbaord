@@ -9,9 +9,10 @@ import { toast } from "sonner";
 interface AdminPrayerFormProps {
   initialData?: Prayer | null;
   onClose: () => void;
+  module: "Prayer" | "Faith";
 }
 
-export function AdminPrayerForm({ initialData, onClose }: AdminPrayerFormProps) {
+export function AdminPrayerForm({ initialData, onClose, module }: AdminPrayerFormProps) {
   const isEditing = !!initialData;
   const createMutation = useCreatePrayer();
   const updateMutation = useUpdatePrayer();
@@ -37,9 +38,11 @@ export function AdminPrayerForm({ initialData, onClose }: AdminPrayerFormProps) 
     thumbnailUrl: "",
     mediaUrl: "",
     contentText: "",
+    publishDate: "",
+    module: module,
   });
 
-  const { data: categories } = useCategories();
+  const { data: categories } = useCategories(module);
   const { data: subCategories } = useSubCategories(formData.categoryId);
 
   useEffect(() => {
@@ -58,9 +61,11 @@ export function AdminPrayerForm({ initialData, onClose }: AdminPrayerFormProps) 
         thumbnailUrl: initialData.thumbnailUrl,
         mediaUrl: initialData.mediaUrl,
         contentText: initialData.contentText,
+        publishDate: initialData.publishDate ? new Date(initialData.publishDate).toISOString().slice(0, 16) : "",
+        module: initialData.module || module,
       });
     }
-  }, [initialData]);
+  }, [initialData, module]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setFormData({
@@ -155,10 +160,17 @@ export function AdminPrayerForm({ initialData, onClose }: AdminPrayerFormProps) 
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (!formData.categoryId) {
+      toast.error("Please create or select a category for this target audience first.");
+      return;
+    }
+
     const payload = {
       ...formData,
       subCategoryId: formData.subCategoryId || undefined,
       ageGroup: formData.ageGroup || undefined,
+      publishDate: formData.publishDate ? new Date(formData.publishDate).toISOString() : null,
     };
 
     if (isEditing && initialData) {
@@ -178,7 +190,7 @@ export function AdminPrayerForm({ initialData, onClose }: AdminPrayerFormProps) 
       <div className="bg-bg-secondary w-full max-w-4xl rounded-2xl shadow-2xl border border-border-subtle flex flex-col max-h-[90vh]">
         <div className="flex items-center justify-between p-6 border-b border-border-subtle shrink-0">
           <h2 className="text-xl font-semibold text-text-primary">
-            {isEditing ? "Edit Prayer" : "Add Prayer"}
+            {isEditing ? `Edit ${module}` : `Add ${module}`}
           </h2>
           <button
             onClick={handleCancel}
@@ -212,6 +224,7 @@ export function AdminPrayerForm({ initialData, onClose }: AdminPrayerFormProps) 
                   className="w-full bg-bg-tertiary border border-border-subtle rounded-lg px-4 py-2.5 text-text-primary focus:outline-none focus:border-accent transition-colors appearance-none"
                 >
                   <option value="General">General</option>
+                  <option value="Adults">Adults</option>
                   <option value="Kids">Kids</option>
                   <option value="Teens">Teens</option>
                 </select>
@@ -271,6 +284,9 @@ export function AdminPrayerForm({ initialData, onClose }: AdminPrayerFormProps) 
                     className="w-full bg-bg-tertiary border border-border-subtle rounded-lg px-4 py-2.5 text-text-primary focus:outline-none focus:border-accent transition-colors appearance-none"
                   >
                     <option value="" disabled>Select age group</option>
+                    {targetAudience === "Adults" && (
+                      <option value="Adults 18+">Adults 18+</option>
+                    )}
                     {targetAudience === "Kids" && (
                       <>
                         <option value="Age 0-5">Age 0-5</option>
@@ -319,7 +335,21 @@ export function AdminPrayerForm({ initialData, onClose }: AdminPrayerFormProps) 
                   <option value="Night Prayer">🌙 Night Prayer</option>
                 </select>
               </div>
-              
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-text-primary">Publish Date & Time</label>
+                <input
+                  type="datetime-local"
+                  name="publishDate"
+                  value={formData.publishDate || ""}
+                  onChange={handleChange}
+                  className="w-full bg-bg-tertiary border border-border-subtle rounded-lg px-4 py-2.5 text-text-primary focus:outline-none focus:border-accent transition-colors"
+                />
+                <p className="text-xs text-text-secondary">Leave empty to publish immediately.</p>
+              </div>
+
               <div className="space-y-2">
                 <label className="text-sm font-medium text-text-primary">Duration (Optional)</label>
                 <input
@@ -481,7 +511,7 @@ export function AdminPrayerForm({ initialData, onClose }: AdminPrayerFormProps) 
             disabled={isLoading}
             className="px-4 py-2 bg-accent text-white rounded-lg hover:bg-accent-hover transition-colors disabled:opacity-50"
           >
-            {isLoading ? "Saving..." : "Save Prayer"}
+            {isLoading ? "Saving..." : `Save ${module}`}
           </button>
         </div>
       </div>

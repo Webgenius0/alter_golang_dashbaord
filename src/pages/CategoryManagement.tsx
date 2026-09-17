@@ -13,20 +13,20 @@ export function CategoryManagement() {
   const deleteCategory = useDeleteCategory();
 
   const [expandedCategory, setExpandedCategory] = useState<string | null>(null);
+  const [activeTab, setActiveTab] = useState<"General" | "Adults" | "Kids" | "Teens">("General");
 
   // Category Modal State
   const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false);
   const [editingCategory, setEditingCategory] = useState<Category | null>(null);
-  const [categoryForm, setCategoryForm] = useState({ name: "", targetAudience: "General" as any });
-
+  const [categoryForm, setCategoryForm] = useState({ name: "", targetAudience: "General" as any, module: "Prayer" as any });
 
   const handleOpenCategoryModal = (category?: Category) => {
     if (category) {
       setEditingCategory(category);
-      setCategoryForm({ name: category.name, targetAudience: category.targetAudience });
+      setCategoryForm({ name: category.name, targetAudience: category.targetAudience, module: category.module || "Prayer" });
     } else {
       setEditingCategory(null);
-      setCategoryForm({ name: "", targetAudience: "General" });
+      setCategoryForm({ name: "", targetAudience: "General", module: "Prayer" });
     }
     setIsCategoryModalOpen(true);
   };
@@ -66,14 +66,30 @@ export function CategoryManagement() {
         </button>
       </div>
 
+      <div className="flex gap-2 overflow-x-auto pb-4 mb-4 scrollbar-hide">
+        {(["General", "Adults", "Kids", "Teens"] as const).map(tab => (
+          <button
+            key={tab}
+            onClick={() => setActiveTab(tab)}
+            className={`px-6 py-2.5 rounded-full font-medium whitespace-nowrap transition-all duration-200 ${
+              activeTab === tab 
+                ? "bg-accent text-white shadow-lg shadow-accent/20" 
+                : "bg-bg-secondary text-text-secondary hover:text-text-primary hover:bg-bg-tertiary"
+            }`}
+          >
+            {tab}
+          </button>
+        ))}
+      </div>
+
       <div className="bg-bg-secondary border border-border-subtle rounded-2xl overflow-hidden">
         {isLoading ? (
           <div className="p-8 text-center text-text-secondary">Loading categories...</div>
-        ) : categories?.length === 0 ? (
-          <div className="p-8 text-center text-text-secondary">No categories found.</div>
+        ) : categories?.filter(c => c.targetAudience === activeTab).length === 0 ? (
+          <div className="p-8 text-center text-text-secondary">No {activeTab.toLowerCase()} categories found.</div>
         ) : (
           <div className="divide-y divide-border-subtle">
-            {categories?.map(category => (
+            {categories?.filter(c => c.targetAudience === activeTab).map(category => (
               <CategoryRow 
                 key={category.id} 
                 category={category} 
@@ -114,8 +130,20 @@ export function CategoryManagement() {
                   className="w-full bg-bg-secondary border border-border-subtle rounded-xl px-4 py-2.5 text-white focus:border-accent focus:outline-none transition-colors"
                 >
                   <option value="General">General</option>
+                  <option value="Adults">Adults</option>
                   <option value="Kids">Kids</option>
                   <option value="Teens">Teens</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-text-secondary mb-1">Module</label>
+                <select
+                  value={categoryForm.module}
+                  onChange={e => setCategoryForm({...categoryForm, module: e.target.value as any})}
+                  className="w-full bg-bg-secondary border border-border-subtle rounded-xl px-4 py-2.5 text-white focus:border-accent focus:outline-none transition-colors"
+                >
+                  <option value="Prayer">Prayer</option>
+                  <option value="Faith">Faith</option>
                 </select>
               </div>
               <div className="flex justify-end gap-3 mt-4">
@@ -175,7 +203,10 @@ function CategoryRow({ category, isExpanded, onToggle, onEdit, onDelete }: any) 
           </div>
           <div className="flex flex-col">
             <span className="font-medium text-text-primary group-hover:text-accent transition-colors">{category.name}</span>
-            <span className="text-xs text-text-secondary mt-1 px-2 py-0.5 bg-white/5 rounded-md inline-block w-max">{category.targetAudience}</span>
+            <div className="flex gap-2 mt-1">
+              <span className="text-xs text-text-secondary px-2 py-0.5 bg-white/5 rounded-md inline-block w-max">{category.targetAudience}</span>
+              <span className={`text-xs px-2 py-0.5 rounded-md inline-block w-max ${category.module === 'Faith' ? 'bg-purple-500/10 text-purple-400' : 'bg-blue-500/10 text-blue-400'}`}>{category.module || 'Prayer'}</span>
+            </div>
           </div>
         </div>
         <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity" onClick={e => e.stopPropagation()}>

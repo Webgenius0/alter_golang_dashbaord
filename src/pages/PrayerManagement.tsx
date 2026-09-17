@@ -4,7 +4,11 @@ import { AdminPrayerForm } from "../components/prayers/AdminPrayerForm";
 import { type Prayer } from "../hooks/prayers/usePrayers";
 import { Plus, BookHeart } from "lucide-react";
 
-export function PrayerManagement() {
+interface PrayerManagementProps {
+  module: "Prayer" | "Faith";
+}
+
+export function PrayerManagement({ module }: PrayerManagementProps) {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingPrayer, setEditingPrayer] = useState<Prayer | null>(null);
 
@@ -31,10 +35,10 @@ export function PrayerManagement() {
             <div className="w-10 h-10 rounded-xl bg-accent/20 flex items-center justify-center text-accent">
               <BookHeart size={20} />
             </div>
-            <h1 className="text-3xl font-semibold text-text-primary">Prayers</h1>
+            <h1 className="text-3xl font-semibold text-text-primary">{module}s</h1>
           </div>
           <p className="text-text-secondary ml-14">
-            Manage prayers, categorizations, and media content.
+            Manage {module.toLowerCase()}s, categorizations, and media content.
           </p>
         </div>
         
@@ -43,16 +47,17 @@ export function PrayerManagement() {
           className="flex items-center justify-center gap-2 px-6 py-2.5 bg-accent text-white font-medium rounded-xl hover:bg-accent-hover transition-colors shadow-lg shadow-accent/20 hover:shadow-accent/40 hover:-translate-y-0.5 w-full sm:w-auto"
         >
           <Plus size={20} />
-          Add Prayer
+          Add {module}
         </button>
       </div>
 
-      <AdminPrayerList onEdit={handleEdit} />
+      <AdminPrayerList onEdit={handleEdit} module={module} />
 
       {isFormOpen && (
         <AdminPrayerForm
           initialData={editingPrayer}
           onClose={handleCloseForm}
+          module={module}
         />
       )}
     </div>

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { usePrayers, useDeletePrayer, type Prayer, type PrayerFilters } from "../../hooks/prayers/usePrayers";
 import { useCategories } from "../../hooks/prayers/useCategories";
 import { Edit2, Trash2, FolderTree, Clock, Filter, X } from "lucide-react";
@@ -6,18 +6,23 @@ import { ConfirmModal } from "../ConfirmModal";
 
 interface AdminPrayerListProps {
   onEdit: (prayer: Prayer) => void;
+  module: "Prayer" | "Faith";
 }
 
-export function AdminPrayerList({ onEdit }: AdminPrayerListProps) {
+export function AdminPrayerList({ onEdit, module }: AdminPrayerListProps) {
   const [page, setPage] = useState(1);
   const limit = 10;
   
-  const [filters, setFilters] = useState<PrayerFilters>({});
+  const [filters, setFilters] = useState<PrayerFilters>({ module });
   const [isFilterOpen, setIsFilterOpen] = useState(true);
   const [deleteTarget, setDeleteTarget] = useState<{ id: string; title: string } | null>(null);
-  
+
+  useEffect(() => {
+    setFilters(prev => ({ ...prev, module }));
+  }, [module]);
+
   const { data, isLoading, isError } = usePrayers(page, limit, filters);
-  const { data: categories } = useCategories();
+  const { data: categories } = useCategories(module);
   const deleteMutation = useDeletePrayer();
 
   const handleDelete = (id: string, title: string) => {
@@ -43,7 +48,7 @@ export function AdminPrayerList({ onEdit }: AdminPrayerListProps) {
   };
 
   const clearFilters = () => {
-    setFilters({});
+    setFilters({ module });
     setPage(1);
   };
 
@@ -171,6 +176,7 @@ export function AdminPrayerList({ onEdit }: AdminPrayerListProps) {
                 <th className="p-4 font-semibold text-text-secondary text-sm uppercase tracking-wider w-16">Cover</th>
                 <th className="p-4 font-semibold text-text-secondary text-sm uppercase tracking-wider">Title & Details</th>
                 <th className="p-4 font-semibold text-text-secondary text-sm uppercase tracking-wider">Category</th>
+                <th className="p-4 font-semibold text-text-secondary text-sm uppercase tracking-wider">Publish Date</th>
                 <th className="p-4 font-semibold text-text-secondary text-sm uppercase tracking-wider">Media</th>
                 <th className="p-4 font-semibold text-text-secondary text-sm uppercase tracking-wider text-right">Actions</th>
               </tr>
@@ -224,6 +230,20 @@ export function AdminPrayerList({ onEdit }: AdminPrayerListProps) {
                           </span>
                         )}
                       </div>
+                    </td>
+                    <td className="p-4 align-middle">
+                      {prayer.publishDate ? (
+                        <div className="flex flex-col gap-1">
+                          <span className={`text-sm font-medium ${new Date(prayer.publishDate) > new Date() ? 'text-amber-400' : 'text-emerald-400'}`}>
+                            {new Date(prayer.publishDate) > new Date() ? 'Scheduled' : 'Published'}
+                          </span>
+                          <span className="text-xs text-text-secondary">
+                            {new Date(prayer.publishDate).toLocaleDateString()} {new Date(prayer.publishDate).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                          </span>
+                        </div>
+                      ) : (
+                        <span className="text-sm text-emerald-400 font-medium">Published (Now)</span>
+                      )}
                     </td>
                     <td className="p-4 align-middle text-text-secondary text-sm">
                       <div className="flex flex-col gap-1">

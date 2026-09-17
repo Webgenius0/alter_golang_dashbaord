@@ -90,6 +90,11 @@ function DashboardLayout() {
             <BookHeart size={20} className={location.pathname === '/prayers' ? "text-accent" : "group-hover:text-accent transition-colors"} />
             Prayers
           </Link>
+          <Link to="/faith" className={navLinkClass('/faith')}>
+            {activeLinkBg('/faith')}
+            <BookHeart size={20} className={location.pathname === '/faith' ? "text-accent" : "group-hover:text-accent transition-colors"} />
+            Faith
+          </Link>
           <Link to="/categories" className={navLinkClass('/categories')}>
             {activeLinkBg('/categories')}
             <FolderTree size={20} className={location.pathname === '/categories' ? "text-accent" : "group-hover:text-accent transition-colors"} />
@@ -214,7 +219,8 @@ function DashboardLayout() {
           <Route path="/motivations" element={<Motivations />} />
           <Route path="/worship" element={<Worship />} />
           <Route path="/proverbs" element={<Proverbs />} />
-          <Route path="/prayers" element={<PrayerManagement />} />
+          <Route path="/prayers" element={<PrayerManagement module="Prayer" />} />
+          <Route path="/faith" element={<PrayerManagement module="Faith" />} />
           <Route path="/categories" element={<CategoryManagement />} />
           <Route path="/library" element={<Library />} />
           <Route path="/settings" element={<Settings />} />
