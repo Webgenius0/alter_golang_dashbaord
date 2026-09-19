@@ -9,6 +9,7 @@ import { Library } from './pages/Library'
 import { Proverbs } from './pages/Proverbs'
 import { PrayerManagement } from './pages/PrayerManagement'
 import { CategoryManagement } from './pages/CategoryManagement'
+import { UserManagement } from './pages/UserManagement'
 import { useLogout } from './hooks/auth/useLogout'
 function DashboardLayout() {
   const logoutMutation = useLogout()
@@ -224,7 +225,7 @@ function DashboardLayout() {
           <Route path="/categories" element={<CategoryManagement />} />
           <Route path="/library" element={<Library />} />
           <Route path="/settings" element={<Settings />} />
-          <Route path="/users" element={<div className="p-8"><h1 className="text-3xl font-semibold">Users</h1></div>} />
+          <Route path="/users" element={<UserManagement />} />
         </Routes>
       </main>
     </div>
