@@ -135,26 +135,6 @@ export function AdminCMSForm({ page, isOpen, onClose, onSubmit, isSubmitting }: 
                 />
               </div>
 
-              <div className="space-y-2">
-                <label className="block text-sm font-medium text-text-secondary">
-                  Slug URL <span className="text-red-500">*</span>
-                </label>
-                <div className="flex">
-                  <span className="inline-flex items-center px-4 rounded-l-xl border border-r-0 border-border-subtle bg-bg-secondary text-text-secondary text-sm">
-                    /cms/pages/
-                  </span>
-                  <input
-                    type="text"
-                    required
-                    disabled={!!page}
-                    value={formData.slug}
-                    onChange={(e) => setFormData({ ...formData, slug: e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, '') })}
-                    className="flex-1 bg-bg-secondary border border-border-subtle rounded-r-xl px-4 py-3 text-white focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-colors disabled:opacity-50"
-                    placeholder="privacy-policy"
-                  />
-                </div>
-                {!!page && <p className="text-xs text-text-secondary">The URL slug cannot be changed after creation.</p>}
-              </div>
 
               <div className="space-y-2">
                 <label className="block text-sm font-medium text-text-secondary">
