@@ -1,4 +1,5 @@
 import { Edit2, Trash2, Globe } from "lucide-react";
+import { getOptimizedImageUrl } from "../../utils/cloudinary";
 
 export type AdminLanguage = {
   id: string;
@@ -53,7 +54,7 @@ export function AdminLanguageList({ languages, isLoading, onEdit, onDelete }: Ad
                   <div className="w-10 h-10 rounded-full bg-bg-tertiary flex items-center justify-center border border-border-subtle overflow-hidden">
                     {language.flag_icon ? (
                       language.flag_icon.startsWith('http') ? (
-                        <img src={language.flag_icon} alt={language.name} className="w-full h-full object-cover" />
+                        <img src={getOptimizedImageUrl(language.flag_icon, true)} alt={language.name} className="w-full h-full object-cover" />
                       ) : (
                         <span className="text-xl">{language.flag_icon}</span>
                       )
