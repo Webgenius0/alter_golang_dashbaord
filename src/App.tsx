@@ -1,4 +1,4 @@
-import { LayoutDashboard, Users, Settings as SettingsIcon, Search, Bell, TrendingUp, TrendingDown, Layers, LogOut, Video, Menu, X, BookOpen, Music, BookText, BookHeart, FolderTree, Globe } from 'lucide-react'
+import { LayoutDashboard, Users, Settings as SettingsIcon, Search, Bell, TrendingUp, TrendingDown, Layers, LogOut, Video, Menu, X, BookOpen, Music, BookText, BookHeart, FolderTree, Globe, HelpCircle } from 'lucide-react'
 import { Routes, Route, Navigate, Link, useLocation } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import { Login } from './pages/Login'
@@ -11,6 +11,7 @@ import { PrayerManagement } from './pages/PrayerManagement'
 import { CategoryManagement } from './pages/CategoryManagement'
 import { UserManagement } from './pages/UserManagement'
 import { LanguageManagement } from './pages/LanguageManagement'
+import { AdminFAQs } from './pages/AdminFAQs'
 import { useLogout } from './hooks/auth/useLogout'
 function DashboardLayout() {
   const logoutMutation = useLogout()
@@ -106,6 +107,11 @@ function DashboardLayout() {
             {activeLinkBg('/languages')}
             <Globe size={20} className={location.pathname === '/languages' ? "text-accent" : "group-hover:text-accent transition-colors"} />
             Languages
+          </Link>
+          <Link to="/faqs" className={navLinkClass('/faqs')}>
+            {activeLinkBg('/faqs')}
+            <HelpCircle size={20} className={location.pathname === '/faqs' ? "text-accent" : "group-hover:text-accent transition-colors"} />
+            Help & Support
           </Link>
           <Link to="/library" className={navLinkClass('/library')}>
             {activeLinkBg('/library')}
@@ -230,6 +236,7 @@ function DashboardLayout() {
           <Route path="/faith" element={<PrayerManagement module="Faith" />} />
           <Route path="/categories" element={<CategoryManagement />} />
           <Route path="/languages" element={<LanguageManagement />} />
+          <Route path="/faqs" element={<AdminFAQs />} />
           <Route path="/library" element={<Library />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/users" element={<UserManagement />} />
