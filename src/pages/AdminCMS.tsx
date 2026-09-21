@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
+import { Plus } from "lucide-react";
 import { AdminCMSList } from "../components/cms/AdminCMSList";
 import type { AdminCMSPage } from "../components/cms/AdminCMSList";
 import { AdminCMSForm } from "../components/cms/AdminCMSForm";
@@ -37,15 +38,17 @@ export function AdminCMS() {
   }, []);
 
   const handleFormSubmit = async (formData: any) => {
-    if (!editingPage) return;
+    const isEditing = !!editingPage;
     
     setIsSubmitting(true);
     try {
       const token = localStorage.getItem("accessToken");
-      const url = `${import.meta.env.VITE_API_URL}/admin/cms/pages/${editingPage.slug}`;
+      const url = isEditing 
+        ? `${import.meta.env.VITE_API_URL}/admin/cms/pages/${editingPage.slug}`
+        : `${import.meta.env.VITE_API_URL}/admin/cms/pages`;
         
       const res = await fetch(url, {
-        method: "PUT",
+        method: isEditing ? "PUT" : "POST",
         headers: {
           "Content-Type": "application/json",
           "Authorization": `Bearer ${token}`
@@ -73,6 +76,19 @@ export function AdminCMS() {
         <div>
           <h1 className="text-3xl font-bold text-white tracking-tight">Pages</h1>
           <p className="text-text-secondary mt-1">Manage static legal and informational pages</p>
+        </div>
+
+        <div className="flex items-center gap-4">
+          <button
+            onClick={() => {
+              setEditingPage(null);
+              setIsFormOpen(true);
+            }}
+            className="flex items-center gap-2 px-6 py-2.5 bg-accent hover:bg-accent-hover text-white rounded-xl font-medium transition-colors shadow-lg shadow-accent/25"
+          >
+            <Plus size={20} />
+            <span>Add Page</span>
+          </button>
         </div>
       </div>
 

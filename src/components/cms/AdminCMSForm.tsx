@@ -12,6 +12,7 @@ interface AdminCMSFormProps {
 
 export function AdminCMSForm({ page, isOpen, onClose, onSubmit, isSubmitting }: AdminCMSFormProps) {
   const [formData, setFormData] = useState({
+    slug: "",
     title: "",
     intro_text: "",
   });
@@ -21,10 +22,18 @@ export function AdminCMSForm({ page, isOpen, onClose, onSubmit, isSubmitting }: 
   useEffect(() => {
     if (page) {
       setFormData({
+        slug: page.slug,
         title: page.title,
         intro_text: page.intro_text,
       });
       setSections(page.sections || []);
+    } else {
+      setFormData({
+        slug: "",
+        title: "",
+        intro_text: "",
+      });
+      setSections([]);
     }
   }, [page, isOpen]);
 
@@ -111,10 +120,40 @@ export function AdminCMSForm({ page, isOpen, onClose, onSubmit, isSubmitting }: 
                   type="text"
                   required
                   value={formData.title}
-                  onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                  onChange={(e) => {
+                    const newTitle = e.target.value;
+                    if (!page) {
+                      // Auto-generate slug for new pages
+                      const newSlug = newTitle.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
+                      setFormData({ ...formData, title: newTitle, slug: newSlug });
+                    } else {
+                      setFormData({ ...formData, title: newTitle });
+                    }
+                  }}
                   className="w-full bg-bg-secondary border border-border-subtle rounded-xl px-4 py-3 text-white focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-colors"
                   placeholder="e.g., Privacy Policy"
                 />
+              </div>
+
+              <div className="space-y-2">
+                <label className="block text-sm font-medium text-text-secondary">
+                  Slug URL <span className="text-red-500">*</span>
+                </label>
+                <div className="flex">
+                  <span className="inline-flex items-center px-4 rounded-l-xl border border-r-0 border-border-subtle bg-bg-secondary text-text-secondary text-sm">
+                    /cms/pages/
+                  </span>
+                  <input
+                    type="text"
+                    required
+                    disabled={!!page}
+                    value={formData.slug}
+                    onChange={(e) => setFormData({ ...formData, slug: e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, '') })}
+                    className="flex-1 bg-bg-secondary border border-border-subtle rounded-r-xl px-4 py-3 text-white focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-colors disabled:opacity-50"
+                    placeholder="privacy-policy"
+                  />
+                </div>
+                {!!page && <p className="text-xs text-text-secondary">The URL slug cannot be changed after creation.</p>}
               </div>
 
               <div className="space-y-2">
