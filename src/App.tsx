@@ -12,6 +12,7 @@ import { CategoryManagement } from './pages/CategoryManagement'
 import { UserManagement } from './pages/UserManagement'
 import { LanguageManagement } from './pages/LanguageManagement'
 import { AdminFAQs } from './pages/AdminFAQs'
+import { AdminCMS } from './pages/AdminCMS'
 import { useLogout } from './hooks/auth/useLogout'
 function DashboardLayout() {
   const logoutMutation = useLogout()
@@ -112,6 +113,11 @@ function DashboardLayout() {
             {activeLinkBg('/faqs')}
             <HelpCircle size={20} className={location.pathname === '/faqs' ? "text-accent" : "group-hover:text-accent transition-colors"} />
             Help & Support
+          </Link>
+          <Link to="/cms/pages" className={navLinkClass('/cms/pages')}>
+            {activeLinkBg('/cms/pages')}
+            <BookText size={20} className={location.pathname === '/cms/pages' ? "text-accent" : "group-hover:text-accent transition-colors"} />
+            Pages
           </Link>
           <Link to="/library" className={navLinkClass('/library')}>
             {activeLinkBg('/library')}
@@ -237,6 +243,7 @@ function DashboardLayout() {
           <Route path="/categories" element={<CategoryManagement />} />
           <Route path="/languages" element={<LanguageManagement />} />
           <Route path="/faqs" element={<AdminFAQs />} />
+          <Route path="/cms/pages" element={<AdminCMS />} />
           <Route path="/library" element={<Library />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/users" element={<UserManagement />} />
