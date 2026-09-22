@@ -54,7 +54,7 @@ function DashboardLayout() {
 
       {/* Sidebar */}
       <aside className={`fixed inset-y-0 left-0 z-50 w-[280px] bg-glass-strong backdrop-blur-xl border-r border-border-subtle flex flex-col p-6 transition-transform duration-300 shadow-2xl shadow-black/50 lg:relative lg:translate-x-0 ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}`}>
-        <div className="text-2xl font-bold text-white mb-8 flex items-center justify-between tracking-tight">
+        <div className="text-2xl font-bold text-white mb-8 flex items-center justify-between tracking-tight shrink-0">
           <div className="flex items-center gap-3">
             <div className="p-2 bg-gradient-to-br from-accent to-purple-600 rounded-xl shadow-lg shadow-accent/20">
               <Layers className="text-white" size={24} />
@@ -68,7 +68,7 @@ function DashboardLayout() {
             <X size={20} />
           </button>
         </div>
-        <nav className="flex flex-col gap-2">
+        <nav className="flex flex-col gap-2 flex-1 overflow-y-auto overflow-x-hidden min-h-0 pr-2 pb-4" style={{ scrollbarWidth: 'thin' }}>
           <Link to="/" className={navLinkClass('/')}>
             {activeLinkBg('/')}
             <LayoutDashboard size={20} className={location.pathname === '/' ? "text-accent" : "group-hover:text-accent transition-colors"} />
@@ -136,7 +136,7 @@ function DashboardLayout() {
           </Link>
         </nav>
         
-        <div className="mt-auto pt-6 border-t border-border-subtle/50">
+        <div className="mt-auto pt-6 border-t border-border-subtle/50 shrink-0">
           <button 
             onClick={() => logoutMutation.mutate()}
             disabled={logoutMutation.isPending}
