@@ -37,6 +37,27 @@ export function AdminCMS() {
     fetchPages();
   }, []);
 
+  const handleDelete = async (slug: string) => {
+    if (!window.confirm("Are you sure you want to delete this page?")) return;
+    
+    try {
+      const token = localStorage.getItem("accessToken");
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/admin/cms/pages/${slug}`, {
+        method: "DELETE",
+        headers: {
+          "Authorization": `Bearer ${token}`
+        }
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || "Failed to delete CMS page");
+      
+      toast.success("Page deleted successfully");
+      fetchPages();
+    } catch (error: any) {
+      toast.error(error.message);
+    }
+  };
+
   const handleFormSubmit = async (formData: any) => {
     const isEditing = !!editingPage;
     
@@ -102,6 +123,7 @@ export function AdminCMS() {
               setEditingPage(page);
               setIsFormOpen(true);
             }}
+            onDelete={handleDelete}
           />
         </div>
       </div>

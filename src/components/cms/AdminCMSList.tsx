@@ -1,4 +1,4 @@
-import { Edit2, BookText } from "lucide-react";
+import { Edit2, BookText, Trash2 } from "lucide-react";
 
 export type CMSPageSection = {
   id: string;
@@ -21,9 +21,10 @@ interface AdminCMSListProps {
   pages: AdminCMSPage[];
   isLoading: boolean;
   onEdit: (page: AdminCMSPage) => void;
+  onDelete: (slug: string) => void;
 }
 
-export function AdminCMSList({ pages, isLoading, onEdit }: AdminCMSListProps) {
+export function AdminCMSList({ pages, isLoading, onEdit, onDelete }: AdminCMSListProps) {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center p-12">
@@ -80,10 +81,17 @@ export function AdminCMSList({ pages, isLoading, onEdit }: AdminCMSListProps) {
                 <div className="col-span-2 flex items-center justify-end gap-2">
                   <button
                     onClick={() => onEdit(page)}
-                    className="p-2 text-text-secondary hover:text-white hover:bg-white/10 rounded-lg transition-colors flex items-center gap-2 px-4"
+                    className="p-2 text-text-secondary hover:text-white hover:bg-white/10 rounded-lg transition-colors flex items-center gap-2 px-3"
+                    title="Edit"
                   >
                     <Edit2 size={16} />
-                    <span>Edit</span>
+                  </button>
+                  <button
+                    onClick={() => onDelete(page.slug)}
+                    className="p-2 text-text-secondary hover:text-red-500 hover:bg-red-500/10 rounded-lg transition-colors flex items-center gap-2 px-3"
+                    title="Delete"
+                  >
+                    <Trash2 size={16} />
                   </button>
                 </div>
               </div>
