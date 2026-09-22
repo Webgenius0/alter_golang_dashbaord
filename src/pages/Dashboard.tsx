@@ -1,37 +1,48 @@
 import { 
   Users, TrendingUp, TrendingDown, LayoutDashboard, 
-  Activity, BookOpen, Music
+  Activity, BookOpen, Music, Loader2
 } from 'lucide-react';
 import { 
   AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
   PieChart, Pie, Cell
 } from 'recharts';
-
-const userGrowthData = [
-  { name: 'Mon', users: 4000, active: 2400 },
-  { name: 'Tue', users: 4500, active: 2600 },
-  { name: 'Wed', users: 5100, active: 2900 },
-  { name: 'Thu', users: 6200, active: 3100 },
-  { name: 'Fri', users: 7800, active: 3800 },
-  { name: 'Sat', users: 8500, active: 4200 },
-  { name: 'Sun', users: 9200, active: 4800 },
-];
-
-const contentDistribution = [
-  { name: 'Prayers', value: 400, color: '#6366f1' },
-  { name: 'Motivations', value: 300, color: '#8b5cf6' },
-  { name: 'Worship', value: 300, color: '#ec4899' },
-  { name: 'Proverbs', value: 200, color: '#10b981' },
-];
-
-const recentActivity = [
-  { id: 1, user: 'Sarah Jenkins', action: 'Created a new Prayer', time: '2 mins ago', type: 'prayer' },
-  { id: 2, user: 'Michael Chen', action: 'Uploaded Worship Audio', time: '15 mins ago', type: 'worship' },
-  { id: 3, user: 'Emma Davis', action: 'Joined the platform', time: '1 hour ago', type: 'user' },
-  { id: 4, user: 'James Wilson', action: 'Added a new Proverb', time: '3 hours ago', type: 'proverb' },
-];
+import { useDashboardOverview } from '../hooks/dashboard/useDashboard';
 
 export function Dashboard() {
+  const { data, isLoading, isError } = useDashboardOverview();
+
+  if (isLoading) {
+    return (
+      <div className="flex h-full w-full items-center justify-center p-8">
+        <div className="flex flex-col items-center gap-4 text-text-secondary">
+          <Loader2 className="animate-spin text-accent" size={32} />
+          <p>Loading dashboard overview...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (isError || !data) {
+    return (
+      <div className="flex h-full w-full items-center justify-center p-8">
+        <div className="bg-red-500/10 border border-red-500/20 text-red-400 p-6 rounded-2xl flex flex-col items-center gap-2">
+          <p className="font-semibold text-lg">Failed to load dashboard</p>
+          <p className="text-sm">Please try refreshing the page or check your connection.</p>
+        </div>
+      </div>
+    );
+  }
+
+  const {
+    totalUsers,
+    activeSessions,
+    engagement,
+    totalContent,
+    userGrowthData,
+    contentDistribution,
+    recentActivity,
+  } = data;
+
   return (
     <div className="p-4 lg:p-8 max-w-7xl mx-auto w-full animate-slide-up">
       <div className="mb-8 lg:mb-10 flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4">
@@ -54,7 +65,7 @@ export function Dashboard() {
               <Users size={20} />
             </div>
           </div>
-          <div className="text-4xl lg:text-5xl font-extrabold text-white relative z-10">12,485</div>
+          <div className="text-4xl lg:text-5xl font-extrabold text-white relative z-10">{totalUsers.toLocaleString()}</div>
           <div className="flex items-center gap-2 text-sm font-bold text-emerald-400 relative z-10 bg-emerald-400/10 w-fit px-3 py-1 rounded-full">
             <TrendingUp size={16} />
             <span>+12.5% this week</span>
@@ -69,7 +80,7 @@ export function Dashboard() {
               <LayoutDashboard size={20} />
             </div>
           </div>
-          <div className="text-4xl lg:text-5xl font-extrabold text-white relative z-10">1,245</div>
+          <div className="text-4xl lg:text-5xl font-extrabold text-white relative z-10">{activeSessions.toLocaleString()}</div>
           <div className="flex items-center gap-2 text-sm font-bold text-red-400 relative z-10 bg-red-400/10 w-fit px-3 py-1 rounded-full">
             <TrendingDown size={16} />
             <span>-3.2% vs last week</span>
@@ -84,7 +95,7 @@ export function Dashboard() {
               <Activity size={20} />
             </div>
           </div>
-          <div className="text-4xl lg:text-5xl font-extrabold text-white relative z-10">84.2%</div>
+          <div className="text-4xl lg:text-5xl font-extrabold text-white relative z-10">{engagement}%</div>
           <div className="flex items-center gap-2 text-sm font-bold text-emerald-400 relative z-10 bg-emerald-400/10 w-fit px-3 py-1 rounded-full">
             <TrendingUp size={16} />
             <span>+5.1% this week</span>
@@ -99,7 +110,7 @@ export function Dashboard() {
               <BookOpen size={20} />
             </div>
           </div>
-          <div className="text-4xl lg:text-5xl font-extrabold text-white relative z-10">4,892</div>
+          <div className="text-4xl lg:text-5xl font-extrabold text-white relative z-10">{totalContent.toLocaleString()}</div>
           <div className="flex items-center gap-2 text-sm font-bold text-emerald-400 relative z-10 bg-emerald-400/10 w-fit px-3 py-1 rounded-full">
             <TrendingUp size={16} />
             <span>+84 new items</span>
