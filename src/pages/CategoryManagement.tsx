@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Plus, Edit2, Trash2, ChevronRight, ChevronDown } from "lucide-react";
+import { createPortal } from "react-dom";
 import { useCategories, useCreateCategory, useUpdateCategory, useDeleteCategory } from "../hooks/prayers/useCategories";
 import type { Category } from "../hooks/prayers/useCategories";
 import { useSubCategories, useCreateSubCategory, useUpdateSubCategory, useDeleteSubCategory } from "../hooks/prayers/useSubCategories";
@@ -107,8 +108,8 @@ export function CategoryManagement() {
         )}
       </div>
 
-      {isCategoryModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
+      {isCategoryModalOpen && createPortal(
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm">
           <div className="bg-bg-primary border border-border-subtle rounded-2xl p-6 w-full max-w-md shadow-2xl">
             <h2 className="text-xl font-bold mb-4">{editingCategory ? "Edit Category" : "New Category"}</h2>
             <form onSubmit={handleSaveCategory} className="flex flex-col gap-4">
@@ -152,7 +153,8 @@ export function CategoryManagement() {
               </div>
             </form>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   );
@@ -253,8 +255,8 @@ function CategoryRow({ category, isExpanded, onToggle, onEdit, onDelete }: any) 
         </div>
       )}
 
-      {isSubModalOpen && (
-        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/60 backdrop-blur-sm">
+      {isSubModalOpen && createPortal(
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm">
           <div className="bg-bg-primary border border-border-subtle rounded-2xl p-6 w-full max-w-sm shadow-2xl">
             <h2 className="text-xl font-bold mb-4">{editingSub ? "Edit Subcategory" : "New Subcategory"}</h2>
             <form onSubmit={handleSaveSub} className="flex flex-col gap-4">
@@ -274,7 +276,8 @@ function CategoryRow({ category, isExpanded, onToggle, onEdit, onDelete }: any) 
               </div>
             </form>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   );
