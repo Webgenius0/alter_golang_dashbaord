@@ -1,4 +1,4 @@
-import { LayoutDashboard, Users, Settings as SettingsIcon, Search, Bell, TrendingUp, TrendingDown, Layers, LogOut, Video, Menu, X, BookOpen, Music, BookText, BookHeart, FolderTree, Globe, HelpCircle } from 'lucide-react'
+import { LayoutDashboard, Users, Settings as SettingsIcon, Search, Bell, Layers, LogOut, Video, Menu, X, BookOpen, Music, BookText, BookHeart, FolderTree, Globe, HelpCircle } from 'lucide-react'
 import { Routes, Route, Navigate, Link, useLocation } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import { Login } from './pages/Login'
