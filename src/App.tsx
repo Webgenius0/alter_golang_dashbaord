@@ -14,6 +14,7 @@ import { LanguageManagement } from './pages/LanguageManagement'
 import { AdminFAQs } from './pages/AdminFAQs'
 import { AdminCMS } from './pages/AdminCMS'
 import { useLogout } from './hooks/auth/useLogout'
+import { Dashboard } from './pages/Dashboard'
 function DashboardLayout() {
   const logoutMutation = useLogout()
   const location = useLocation()
@@ -192,48 +193,7 @@ function DashboardLayout() {
 
         {/* Content Area */}
         <Routes>
-          <Route path="/" element={
-            <div className="p-4 lg:p-8 max-w-7xl mx-auto w-full animate-slide-up">
-              <div className="mb-8 lg:mb-10 flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4">
-                <div>
-                  <h1 className="text-3xl lg:text-4xl font-extrabold text-white tracking-tight">Dashboard Overview</h1>
-                  <p className="text-text-secondary mt-2 text-base lg:text-lg">Welcome back. Here's what's happening today.</p>
-                </div>
-              </div>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-10">
-                <div className="group relative bg-bg-secondary/50 backdrop-blur-lg border border-border-subtle rounded-3xl p-6 flex flex-col gap-4 overflow-hidden hover:-translate-y-2 hover:shadow-[0_8px_30px_rgb(0,0,0,0.5)] hover:shadow-accent/20 hover:border-accent/50 transition-all duration-500 cursor-pointer">
-                  <div className="absolute top-0 right-0 w-32 h-32 bg-accent/10 rounded-full blur-3xl -mr-10 -mt-10 transition-all group-hover:bg-accent/20"></div>
-                  <div className="flex items-center justify-between text-text-secondary font-medium relative z-10">
-                    <span className="text-sm uppercase tracking-wider font-semibold">Total Users</span>
-                    <div className="p-2 bg-white/5 rounded-lg text-white group-hover:scale-110 group-hover:text-accent transition-all duration-300">
-                      <Users size={20} />
-                    </div>
-                  </div>
-                  <div className="text-5xl font-extrabold text-white relative z-10">12,485</div>
-                  <div className="flex items-center gap-2 text-sm font-bold text-emerald-400 relative z-10 bg-emerald-400/10 w-fit px-3 py-1 rounded-full">
-                    <TrendingUp size={16} />
-                    <span>+12.5% this week</span>
-                  </div>
-                </div>
-                
-                <div className="group relative bg-bg-secondary/50 backdrop-blur-lg border border-border-subtle rounded-3xl p-6 flex flex-col gap-4 overflow-hidden hover:-translate-y-2 hover:shadow-[0_8px_30px_rgb(0,0,0,0.5)] hover:shadow-purple-500/20 hover:border-purple-500/50 transition-all duration-500 cursor-pointer">
-                  <div className="absolute top-0 right-0 w-32 h-32 bg-purple-500/10 rounded-full blur-3xl -mr-10 -mt-10 transition-all group-hover:bg-purple-500/20"></div>
-                  <div className="flex items-center justify-between text-text-secondary font-medium relative z-10">
-                    <span className="text-sm uppercase tracking-wider font-semibold">Active Sessions</span>
-                    <div className="p-2 bg-white/5 rounded-lg text-white group-hover:scale-110 group-hover:text-purple-400 transition-all duration-300">
-                      <LayoutDashboard size={20} />
-                    </div>
-                  </div>
-                  <div className="text-5xl font-extrabold text-white relative z-10">1,245</div>
-                  <div className="flex items-center gap-2 text-sm font-bold text-red-400 relative z-10 bg-red-400/10 w-fit px-3 py-1 rounded-full">
-                    <TrendingDown size={16} />
-                    <span>-3.2% vs last week</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          } />
+          <Route path="/" element={<Dashboard />} />
           
           <Route path="/motivations" element={<Motivations />} />
           <Route path="/worship" element={<Worship />} />
