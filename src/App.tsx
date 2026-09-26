@@ -1,4 +1,4 @@
-import { LayoutDashboard, Users, Settings as SettingsIcon, Search, Bell, Layers, LogOut, Video, Menu, X, BookOpen, Music, BookText, BookHeart, FolderTree, Globe, HelpCircle, Quote } from 'lucide-react'
+import { LayoutDashboard, Users, Settings as SettingsIcon, Search, Bell, Layers, LogOut, Video, Menu, X, BookOpen, Music, BookText, BookHeart, FolderTree, Globe, HelpCircle, Quote, Sparkles, Heart } from 'lucide-react'
 import { Routes, Route, Navigate, Link, useLocation } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import { Login } from './pages/Login'
@@ -14,6 +14,8 @@ import { LanguageManagement } from './pages/LanguageManagement'
 import { AdminFAQs } from './pages/AdminFAQs'
 import { AdminCMS } from './pages/AdminCMS'
 import { AdminQuotes } from './pages/AdminQuotes'
+import { AdminIllustrations } from './pages/AdminIllustrations'
+import { AdminEncouragements } from './pages/AdminEncouragements'
 import { useLogout } from './hooks/auth/useLogout'
 import { Dashboard } from './pages/Dashboard'
 function DashboardLayout() {
@@ -100,6 +102,16 @@ function DashboardLayout() {
             {activeLinkBg('/quotes')}
             <Quote size={20} className={location.pathname === '/quotes' ? "text-accent" : "group-hover:text-accent transition-colors"} />
             Daily Quotes
+          </Link>
+          <Link to="/illustrations" className={navLinkClass('/illustrations')}>
+            {activeLinkBg('/illustrations')}
+            <Sparkles size={20} className={location.pathname === '/illustrations' ? "text-accent" : "group-hover:text-accent transition-colors"} />
+            Illustrations
+          </Link>
+          <Link to="/encouragements" className={navLinkClass('/encouragements')}>
+            {activeLinkBg('/encouragements')}
+            <Heart size={20} className={location.pathname === '/encouragements' ? "text-accent" : "group-hover:text-accent transition-colors"} />
+            Encouragements
           </Link>
           <Link to="/faith" className={navLinkClass('/faith')}>
             {activeLinkBg('/faith')}
@@ -212,6 +224,8 @@ function DashboardLayout() {
           <Route path="/cms/pages" element={<AdminCMS />} />
           <Route path="/library" element={<Library />} />
           <Route path="/quotes" element={<AdminQuotes />} />
+          <Route path="/illustrations" element={<AdminIllustrations />} />
+          <Route path="/encouragements" element={<AdminEncouragements />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/users" element={<UserManagement />} />
         </Routes>
