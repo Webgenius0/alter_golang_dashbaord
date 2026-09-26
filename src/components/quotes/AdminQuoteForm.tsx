@@ -13,7 +13,7 @@ interface AdminQuoteFormProps {
 
 export function AdminQuoteForm({ quote, isOpen, onClose, onSubmit, isSubmitting }: AdminQuoteFormProps) {
   const [formData, setFormData] = useState({
-    publish_date: new Date().toISOString().split('T')[0],
+    publish_date: new Date().toISOString().slice(0, 16),
     quote_text: "",
     reference: "",
     explanation: ""
@@ -22,14 +22,14 @@ export function AdminQuoteForm({ quote, isOpen, onClose, onSubmit, isSubmitting 
   useEffect(() => {
     if (quote && isOpen) {
       setFormData({
-        publish_date: quote.publish_date,
+        publish_date: new Date(quote.publish_date).toISOString().slice(0, 16),
         quote_text: quote.quote_text,
         reference: quote.reference || "",
         explanation: quote.explanation || ""
       });
     } else if (!quote && isOpen) {
       setFormData({
-        publish_date: new Date().toISOString().split('T')[0],
+        publish_date: new Date().toISOString().slice(0, 16),
         quote_text: "",
         reference: "",
         explanation: ""
@@ -73,7 +73,7 @@ export function AdminQuoteForm({ quote, isOpen, onClose, onSubmit, isSubmitting 
                   Publish Date *
                 </label>
                 <input
-                  type="date"
+                  type="datetime-local"
                   required
                   value={formData.publish_date}
                   onChange={(e) => setFormData({ ...formData, publish_date: e.target.value })}

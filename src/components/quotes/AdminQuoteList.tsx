@@ -40,8 +40,15 @@ export function AdminQuoteList({ quotes, isLoading, onEdit, onDelete }: AdminQuo
                 key={quote.id}
                 className="grid grid-cols-12 gap-4 px-6 py-5 items-center border-b border-border-subtle hover:bg-white/5 transition-colors group"
               >
-                <div className="col-span-2">
-                  <span className="font-medium text-white">{quote.publish_date}</span>
+                <div className="col-span-2 flex flex-col gap-1 items-start">
+                  <span className="font-medium text-white">
+                    {new Date(quote.publish_date).toLocaleDateString()}
+                  </span>
+                  {new Date(quote.publish_date) > new Date() && (
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-orange-500/20 text-orange-400 border border-orange-500/30">
+                      SCHEDULED
+                    </span>
+                  )}
                 </div>
 
                 <div className="col-span-2">
