@@ -5,6 +5,7 @@ export interface Encouragement {
   id: string;
   contentText: string;
   reference: string;
+  audioUrl?: string;
   createdAt: string;
 }
 
@@ -19,6 +20,7 @@ export interface PaginatedEncouragementResponse {
 export interface CreateEncouragementInput {
   contentText: string;
   reference: string;
+  audioUrl?: string;
 }
 
 const getAuthHeaders = () => ({

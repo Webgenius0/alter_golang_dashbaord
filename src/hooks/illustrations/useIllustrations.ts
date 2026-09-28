@@ -5,6 +5,7 @@ export interface Illustration {
   id: string;
   contentText: string;
   reference: string;
+  audioUrl?: string;
   createdAt: string;
 }
 
@@ -19,6 +20,7 @@ export interface PaginatedIllustrationResponse {
 export interface CreateIllustrationInput {
   contentText: string;
   reference: string;
+  audioUrl?: string;
 }
 
 const getAuthHeaders = () => ({

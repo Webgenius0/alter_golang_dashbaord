@@ -1,5 +1,7 @@
-import { useState } from "react";
-import { X } from "lucide-react";
+import { useState, useRef } from "react";
+import { X, UploadCloud, Trash2 } from "lucide-react";
+import { toast } from "sonner";
+import { useUploadMedia, useDeleteMedia } from "../../hooks/media/useUploadMedia";
 import { useCreateEncouragement, useUpdateEncouragement, type Encouragement, type CreateEncouragementInput } from "../../hooks/encouragements/useEncouragements";
 
 interface AdminEncouragementFormProps {
@@ -11,13 +13,51 @@ export function AdminEncouragementForm({ initialData, onClose }: AdminEncouragem
   const [formData, setFormData] = useState<CreateEncouragementInput>({
     contentText: initialData?.contentText || "",
     reference: initialData?.reference || "",
+    audioUrl: initialData?.audioUrl || "",
   });
 
   const createMutation = useCreateEncouragement();
   const updateMutation = useUpdateEncouragement();
+  const uploadMutation = useUploadMedia();
+  const deleteMediaMutation = useDeleteMedia();
+
+  const audioInputRef = useRef<HTMLInputElement>(null);
+  const [isAudioUploaded, setIsAudioUploaded] = useState(!!initialData?.audioUrl);
 
   const isEditing = !!initialData;
-  const isLoading = createMutation.isPending || updateMutation.isPending;
+  const isLoading = createMutation.isPending || updateMutation.isPending || uploadMutation.isPending;
+
+  const handleAudioUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (!file.type.startsWith("audio/") && !file.type.startsWith("video/")) {
+      toast.error("Please select an audio file");
+      return;
+    }
+
+    uploadMutation.mutate(file, {
+      onSuccess: (data) => {
+        setFormData((prev) => ({ ...prev, audioUrl: data.url }));
+        setIsAudioUploaded(true);
+      },
+    });
+  };
+
+  const handleRemoveAudio = () => {
+    if (isAudioUploaded && formData.audioUrl) {
+      deleteMediaMutation.mutate(formData.audioUrl);
+    }
+    setFormData((prev) => ({ ...prev, audioUrl: "" }));
+    setIsAudioUploaded(false);
+  };
+
+  const handleClose = () => {
+    if (isAudioUploaded && formData.audioUrl && (!initialData || initialData.audioUrl !== formData.audioUrl)) {
+      deleteMediaMutation.mutate(formData.audioUrl);
+    }
+    onClose();
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -39,7 +79,7 @@ export function AdminEncouragementForm({ initialData, onClose }: AdminEncouragem
             {isEditing ? `Edit Encouragement` : `Add Encouragement`}
           </h2>
           <button
-            onClick={onClose}
+            onClick={handleClose}
             className="p-2 text-text-secondary hover:text-text-primary rounded-full hover:bg-white/5 transition-colors"
           >
             <X size={20} />
@@ -73,13 +113,54 @@ export function AdminEncouragementForm({ initialData, onClose }: AdminEncouragem
                 placeholder="e.g. Psalm 23:1-2"
               />
             </div>
+
+            <div>
+              <label className="block text-sm font-medium text-text-secondary mb-2">
+                Audio File
+              </label>
+              
+              {!formData.audioUrl ? (
+                <div
+                  onClick={() => audioInputRef.current?.click()}
+                  className="w-full bg-bg-primary border-2 border-dashed border-border-subtle rounded-xl p-6 flex flex-col items-center justify-center text-text-secondary hover:border-accent hover:text-accent transition-colors cursor-pointer group"
+                >
+                  <UploadCloud size={24} className="mb-2 text-text-secondary group-hover:text-accent transition-colors" />
+                  <span className="text-sm">Click to upload audio</span>
+                  <span className="text-xs opacity-50 mt-1">MP3, WAV, etc.</span>
+                  <input
+                    type="file"
+                    ref={audioInputRef}
+                    className="hidden"
+                    accept="audio/*,video/*"
+                    onChange={handleAudioUpload}
+                  />
+                </div>
+              ) : (
+                <div className="flex items-center gap-4 bg-bg-primary border border-border-subtle rounded-xl p-4">
+                  <div className="flex-1 flex flex-col gap-2">
+                    <audio controls className="w-full h-10">
+                      <source src={formData.audioUrl} />
+                      Your browser does not support the audio element.
+                    </audio>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={handleRemoveAudio}
+                    className="p-2 text-red-500 hover:bg-red-500/10 rounded-lg transition-colors shrink-0"
+                    title="Remove Audio"
+                  >
+                    <Trash2 size={20} />
+                  </button>
+                </div>
+              )}
+            </div>
           </form>
         </div>
 
         <div className="flex items-center justify-end gap-3 p-6 border-t border-border-subtle shrink-0">
           <button
             type="button"
-            onClick={onClose}
+            onClick={handleClose}
             className="px-6 py-2.5 text-text-secondary hover:text-white font-medium transition-colors"
           >
             Cancel
