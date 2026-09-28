@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Edit2, Trash2 } from "lucide-react";
+import { Edit2, Trash2, Volume2 } from "lucide-react";
 import { useEncouragements, useDeleteEncouragement, type Encouragement } from "../../hooks/encouragements/useEncouragements";
 import { ConfirmModal } from "../ConfirmModal";
 
@@ -42,8 +42,13 @@ export function AdminEncouragementList({ onEdit }: AdminEncouragementListProps) 
             ) : (
               items.map((item: Encouragement) => (
                 <tr key={item.id} className="hover:bg-white/5 transition-colors group">
-                  <td className="p-4 text-sm text-text-primary whitespace-pre-wrap max-w-2xl">
-                    {item.contentText.length > 150 ? `${item.contentText.slice(0, 150)}...` : item.contentText}
+                  <td className="p-4 text-sm text-text-primary">
+                    <div className="flex items-center gap-2">
+                      {item.audioUrl && <Volume2 size={16} className="text-accent shrink-0" title="Audio Attached" />}
+                      <span className="whitespace-pre-wrap max-w-2xl">
+                        {item.contentText.length > 150 ? `${item.contentText.slice(0, 150)}...` : item.contentText}
+                      </span>
+                    </div>
                   </td>
                   <td className="p-4 text-sm text-text-secondary">
                     {item.reference || "-"}
